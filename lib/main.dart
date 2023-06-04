@@ -71,7 +71,7 @@ class _MyAppState extends State<MyApp> {
         backgroundColor: AppColors.colorApp2, //background color of button
         foregroundColor: AppColors.colorApp1, //font color, icon color in button
         activeBackgroundColor:
-            AppColors.colorApp3, //background color when menu is expanded
+        AppColors.colorApp3, //background color when menu is expanded
         activeForegroundColor: Colors.white,
         visible: true,
         closeManually: false,
@@ -87,7 +87,7 @@ class _MyAppState extends State<MyApp> {
             foregroundColor: Colors.white,
             label: 'Live Camera',
             labelStyle:
-                const TextStyle(fontSize: 18.0, color: AppColors.colorApp2),
+            const TextStyle(fontSize: 18.0, color: AppColors.colorApp2),
             onTap: () {
               setState(() {
                 option = Options.frame;
@@ -103,7 +103,7 @@ class _MyAppState extends State<MyApp> {
             foregroundColor: Colors.white,
             label: 'Upload Image',
             labelStyle:
-                const TextStyle(fontSize: 18.0, color: AppColors.colorApp2),
+            const TextStyle(fontSize: 18.0, color: AppColors.colorApp2),
             onTap: () {
               setState(() {
                 option = Options.image;
@@ -128,78 +128,78 @@ class _MyAppState extends State<MyApp> {
     }
     flutterTts.speak("Welcome to Currency detection app");
     return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Column(
-              children: [
-                SizedBox(
-                  width: 200,
-                  height: 200,
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.video_library,
-                      size: 200.0,
-                      color: _isCameraIconPressed ? Colors.red : AppColors.colorApp3,
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const YoloVideo(),
-                          )
-                      );
-                      setState(() {
-                        _isCameraIconPressed = true;
-                      });
-                      Future.delayed(const Duration(seconds: 2)).then((_) {
-                        flutterTts.speak("live camera is ready now");
-                      });
-                    },
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Column(
+            children: [
+              SizedBox(
+                width: 200,
+                height: 200,
+                child: IconButton(
+                  icon: Icon(
+                    Icons.video_library,
+                    size: 200.0,
+                    color: _isCameraIconPressed ? Colors.red : AppColors.colorApp3,
                   ),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const YoloVideo(),
+                        )
+                    );
+                    setState(() {
+                      _isCameraIconPressed = true;
+                    });
+                    Future.delayed(const Duration(seconds: 2)).then((_) {
+                      flutterTts.speak("live camera is ready now");
+                    });
+                  },
                 ),
-                Text(
-                  'Live Camera',
-                  style: TextStyle(fontSize: 20),
-                ),
-              ],
-            ),
-            SizedBox(height: 20),
-            Column(
-              children: [
-                SizedBox(
-                  width: 200,
-                  height: 200,
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.camera_alt,
-                      size: 200.0,
-                      color: _isCameraIconPressed ? AppColors.colorApp3 : Colors.red,
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const YoloImage(),
-                          ));
-                      Future.delayed(const Duration(seconds: 2)).then((_) {
-                        flutterTts.speak("Take image is ready now");
-                      });
-                      setState(() {
-                        _isCameraIconPressed = false;
-                      });
-                    },
+              ),
+              Text(
+                'Live Camera',
+                style: TextStyle(fontSize: 20),
+              ),
+            ],
+          ),
+          SizedBox(height: 20),
+          Column(
+            children: [
+              SizedBox(
+                width: 200,
+                height: 200,
+                child: IconButton(
+                  icon: Icon(
+                    Icons.camera_alt,
+                    size: 200.0,
+                    color: _isCameraIconPressed ? AppColors.colorApp3 : Colors.red,
                   ),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const YoloImage(),
+                        ));
+                    Future.delayed(const Duration(seconds: 2)).then((_) {
+                      flutterTts.speak("Take image is ready now");
+                    });
+                    setState(() {
+                      _isCameraIconPressed = false;
+                    });
+                  },
                 ),
-                Text(
-                  'Use Camera To Take Image',
-                  style: TextStyle(fontSize: 20),
-                ),
-              ],
-            ),
-          ],
-        ),
+              ),
+              Text(
+                'Use Camera To Take Image',
+                style: TextStyle(fontSize: 20),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
@@ -299,26 +299,26 @@ class _YoloVideoState extends State<YoloVideo> {
                 ),
                 child: isDetecting
                     ? IconButton(
-                        onPressed: () async {
-                          stopDetection();
-                        },
-                        icon: const Icon(
-                          Icons.stop,
-                          color: Colors.red,
-                        ),
-                        iconSize: 50,
-                      )
+                  onPressed: () async {
+                    stopDetection();
+                  },
+                  icon: const Icon(
+                    Icons.stop,
+                    color: Colors.red,
+                  ),
+                  iconSize: 50,
+                )
                     : IconButton(
-                        onPressed: () async {
-                          await startDetection();
-                          await speak("Now you can detect currency");
-                        },
-                        icon: const Icon(
-                          Icons.play_arrow,
-                          color: Colors.white,
-                        ),
-                        iconSize: 50,
-                      ),
+                  onPressed: () async {
+                    await startDetection();
+                    await speak("Now you can detect currency");
+                  },
+                  icon: const Icon(
+                    Icons.play_arrow,
+                    color: Colors.white,
+                  ),
+                  iconSize: 50,
+                ),
               ),
             ),
           ],
@@ -518,18 +518,8 @@ class _YoloImageState extends State<YoloImage> {
       setState(() {
         yoloResults = result;
       });
-      //String textToSpeak = "'I see a ${result[0]["tag"]}'";
-      //await flutterTts.speak(textToSpeak);
-
-      for (var i = 0; i < yoloResults.length; i++) {
-        Future.delayed(const Duration(seconds: 2)).then((_) async {
-          String textToSpeak = "I see a ${result[i]["tag"]}";
-          await flutterTts.speak(textToSpeak);
-        });
-
-
-      }
-
+      String textToSpeak = "'I see a ${result[0]["tag"]}'";
+      await flutterTts.speak(textToSpeak);
     }
   }
 
