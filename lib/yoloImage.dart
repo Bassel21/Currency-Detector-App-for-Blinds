@@ -102,7 +102,8 @@ class _YoloImageState extends State<YoloImage> {
   Future<void> pickImage() async {
     flutterTts.speak("now You can take image");
     Future.delayed(const Duration(seconds: 3)).then((_) {
-      flutterTts.speak("Please press to side button to can take image ");
+      flutterTts.speak("Please press to side button to can take image ,"
+          "After that, click on the check mark located at the bottom right of the page");
     });
     final ImagePicker picker = ImagePicker();
     // Capture a photo

@@ -107,9 +107,9 @@ class _MyAppState extends State<MyApp> {
               setState(() {
                 option = Options.image;
               });
-              Future.delayed(const Duration(seconds: 1)).then((_) {
-                flutterTts.speak("Pick Image is ready now ");
-              });
+              //Future.delayed(const Duration(seconds: 1)).then((_) {
+               // flutterTts.speak("Pick Image is ready now ");
+              //});
             },
           ),
 
