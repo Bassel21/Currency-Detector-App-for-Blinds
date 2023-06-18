@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vision/flutter_vision.dart';
 import 'package:image_picker/image_picker.dart';
+import 'Home.dart';
 import 'app_color.dart';
 import 'main.dart';
 
@@ -59,7 +60,26 @@ class _YoloImageState extends State<YoloImage> {
         Align(
           alignment: Alignment.bottomCenter,
           child: Container(
-            width: size.width, // Set the width to the screen width
+
+              child: Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    // Add your icon here
+                    Icon(Icons.camera_alt, size: 250.0, color: Colors.white),
+                    GestureDetector(
+                      onTap: yoloOnImage,
+                      onDoubleTap: pickImage,
+                      behavior: HitTestBehavior.translucent,
+                    ),
+                  ],
+                ),
+              )
+
+            /*width: size.width, // Set the width to the screen width
             height: 138.0, // Set the height to 138.0 pixels
             decoration: BoxDecoration(
               color: AppColors.colorApp3, // Set the background color to a custom color
@@ -79,7 +99,7 @@ class _YoloImageState extends State<YoloImage> {
                   ),
                 ),
               ),
-            ),
+            ),*/
           ),
         ),
         ...displayBoxesAroundRecognizedObjects(size),
@@ -100,22 +120,33 @@ class _YoloImageState extends State<YoloImage> {
   }
 
   Future<void> pickImage() async {
-    flutterTts.speak("now You can take image");
-    Future.delayed(const Duration(seconds: 3)).then((_) {
+    final String speech = "now You can take image";
+    await flutterTts.speak(speech);
+    Future.delayed(const Duration(seconds: 2)).then((_) async {
+      final String speech = "Please press to side button to can take image ,"
+          "After that, click on the check mark located at the bottom right of the page";
+      await flutterTts.speak(speech);
+    });
+    /*flutterTts.speak("now You can take image");
+    Future.delayed(const Duration(seconds: 2)).then((_) {
       flutterTts.speak("Please press to side button to can take image ,"
           "After that, click on the check mark located at the bottom right of the page");
-    });
+    });*/
     final ImagePicker picker = ImagePicker();
     // Capture a photo
     final XFile? photo = await picker.pickImage(source: ImageSource.camera);
     if (photo != null) {
       setState(() {
         imageFile = File(photo.path);
-        Future.delayed(const Duration(seconds: 0)).then((_) {
+        flutterTts.speak("You now have Image will detect after 2 secound");
+        Future.delayed(const Duration(seconds: 2)).then((_) {
           yoloOnImage();
           //flutterTts.speak("Image is ready now to detect ");
         });
       });
+    }
+    else {
+      await flutterTts.stop();
     }
   }
 
@@ -145,15 +176,34 @@ class _YoloImageState extends State<YoloImage> {
           allresult += "'I see a ${result[i]["tag"]}' ";
         }
         await flutterTts.speak(allresult);
-      });
-      Future.delayed(const Duration(seconds: 8)).then((_) async {
-        await flutterTts.setSpeechRate(0.3); // Set the speech rate to 0.8 to slow down the speech
         await flutterTts.speak(
-            "if you want hear result again please Click on the bottom of the page one click"
-                "  if you want detect another objects please Click on the bottom of the page double click ");
+            "if you want to hear the result again, please click on Center once. "
+                "If you want to detect another object, please click on center twice.");
       });
     }
+    else  {
+      flutterTts.speak("No objects detected in the image. Please select another image by click double tab on the bottom of the page .");
+
+    }
+    //pickImage();
   }
+//await flutterTts.speak("Image Do not belong to Egyptian Currency Please Try Again");
+  //Future.delayed(const Duration(seconds: 0)).then((_) async {
+  //await pickImage();
+  //});
+
+  //Future.delayed(const Duration(seconds: 8)).then((_) async {
+  //await flutterTts.setSpeechRate(0.3); // Set the speech rate to 0.8 to slow down the speech
+  //await flutterTts.speak(
+  //"if you want hear result again please Click on the bottom of the page one click"
+  //"  if you want detect another objects please Click on the bottom of the page double click ");
+  //});
+
+  //else {
+  //flutterTts.speak(
+  //"No objects detected in the image. Please select another image.");
+  //pickImage();
+  //}
 
   List<Widget> displayBoxesAroundRecognizedObjects(Size screen) {
     if (yoloResults.isEmpty) return[];
