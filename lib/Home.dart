@@ -12,7 +12,11 @@ import 'app_color.dart';
 enum Options { none, image, frame, vision }
 
 FlutterTts flutterTts = FlutterTts();
-
+Future<void> initTts() async {
+  await flutterTts.setLanguage('en-US');
+  await flutterTts.setPitch(1);
+  await flutterTts.setSpeechRate(0.4);
+}
 late List<CameraDescription> cameras;
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,13 +44,14 @@ class _HomeState extends State<Home> {
     super.initState();
     initTts();
     flutterTts.speak("Welcome to Currency detection app");
+
+    Future.delayed(const Duration(seconds: 6)).then((_) async {
+      flutterTts.speak("Click on center to start detection");
+      });
+
   }
 
-  Future<void> initTts() async {
-    await flutterTts.setLanguage('en-US');
-    await flutterTts.setPitch(1);
-    await flutterTts.setSpeechRate(0.5);
-  }
+
 
   @override
   Widget build(BuildContext context) {

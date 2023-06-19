@@ -41,6 +41,10 @@ class _YoloImageState extends State<YoloImage> {
     super.dispose();
     await vision.closeYoloModel();
   }
+  Future<void> speak(String text) async {
+    await flutterTts.setSpeechRate(0.3);
+    await flutterTts.speak(text);
+  }
 
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -69,7 +73,7 @@ class _YoloImageState extends State<YoloImage> {
                   alignment: Alignment.center,
                   children: [
                     // Add your icon here
-                    Icon(Icons.camera_alt, size: 250.0, color: Colors.white),
+                    Icon(Icons.camera_alt, size: 250.0, color: Colors.white.withOpacity(0.3)),
                     GestureDetector(
                       onTap: yoloOnImage,
                       onDoubleTap: pickImage,
@@ -121,11 +125,11 @@ class _YoloImageState extends State<YoloImage> {
 
   Future<void> pickImage() async {
     final String speech = "now You can take image";
-    await flutterTts.speak(speech);
+    await speak(speech);
     Future.delayed(const Duration(seconds: 2)).then((_) async {
       final String speech = "Please press to side button to can take image ,"
           "After that, click on the check mark located at the bottom right of the page";
-      await flutterTts.speak(speech);
+      await speak(speech);
     });
     /*flutterTts.speak("now You can take image");
     Future.delayed(const Duration(seconds: 2)).then((_) {
@@ -138,7 +142,7 @@ class _YoloImageState extends State<YoloImage> {
     if (photo != null) {
       setState(() {
         imageFile = File(photo.path);
-        flutterTts.speak("You now have Image will detect after 2 secound");
+        speak("You now Taked Image");
         Future.delayed(const Duration(seconds: 2)).then((_) {
           yoloOnImage();
           //flutterTts.speak("Image is ready now to detect ");
@@ -169,22 +173,22 @@ class _YoloImageState extends State<YoloImage> {
       });
       int count = result.length;
       String numofobjects = "'you have $count objects'";
-      await flutterTts.speak(numofobjects);
+      await speak(numofobjects);
       Future.delayed(const Duration(seconds: 2)).then((_) async {
         String allresult = "";
         for (var i = 0; i < result.length; i++) {
           allresult += "'I see a ${result[i]["tag"]}' ";
         }
-        await flutterTts.speak(allresult);
-        await flutterTts.speak(
-            "if you want to hear the result again, please click on Center once. "
-                "If you want to detect another object, please click on center twice.");
+        await speak(allresult + "please click once to hear the result again. "
+            " Or click double to detect another object .");
       });
     }
     else  {
-      flutterTts.speak("No objects detected in the image. Please select another image by click double tab on the bottom of the page .");
-
+      speak("No objects detected in the image. Please select another image by click double .");
     }
+    /*String clickMessage = "if you want to hear the result again, please click on Center once. "
+        "If you want to detect another object, please click on center twice.";
+    await flutterTts.speak(clickMessage);*/
     //pickImage();
   }
 //await flutterTts.speak("Image Do not belong to Egyptian Currency Please Try Again");

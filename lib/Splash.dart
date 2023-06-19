@@ -38,7 +38,21 @@ class _SplashScreenState extends State<SplashScreen> {
           backgroundColor: AppColors.colorApp1,
           elevation: 0,
         ),
-        body: Center(
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            //image: AssetImage("assets/images/bemyeye.svg"),
+            image: AssetImage("assets/images/bemyeye.png"),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Column(
+          children: [
+            // Your other widgets here
+          ],
+        ),
+      ),
+        /*body: Center(
           child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -49,6 +63,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   width: width*40,
                 ),
               ]),
-        ));
+        )*/
+    );
   }
 }

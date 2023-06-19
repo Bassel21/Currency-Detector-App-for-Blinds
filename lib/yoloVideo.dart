@@ -37,6 +37,7 @@ class _YoloVideoState extends State<YoloVideo> {
   }
 
   Future<void> speak(String text) async {
+    await flutterTts.setSpeechRate(0.3);
     await flutterTts.speak(text);
   }
 
