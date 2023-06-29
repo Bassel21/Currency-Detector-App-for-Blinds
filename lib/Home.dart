@@ -43,15 +43,13 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     initTts();
-    flutterTts.speak("Welcome to Currency detection app");
 
-    Future.delayed(const Duration(seconds: 6)).then((_) async {
+
+    Future.delayed(const Duration(seconds: 3)).then((_) async {
       flutterTts.speak("Click on center to start detection");
       });
 
   }
-
-
 
   @override
   Widget build(BuildContext context) {

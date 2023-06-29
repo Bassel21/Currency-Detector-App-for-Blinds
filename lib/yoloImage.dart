@@ -42,48 +42,39 @@ class _YoloImageState extends State<YoloImage> {
     await vision.closeYoloModel();
   }
   Future<void> speak(String text) async {
-    await flutterTts.setSpeechRate(0.3);
+    await flutterTts.setSpeechRate(0.4);
     await flutterTts.speak(text);
   }
 
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    if (!isLoaded) {
-      return const Scaffold(
-        body: Center(
-          child: Text("Model not loaded, waiting for it"),
-        ),
-      );
-    }
+    if(imageFile !=null){
+      return Stack(
+        fit: StackFit.expand,
+        children: [
+          imageFile != null ? Image.file(imageFile!) : const SizedBox(),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+                child: Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      // Add your icon here
+                      Icon(Icons.camera_alt, size: 250.0, color: Colors.white.withOpacity(0.3)),
+                      GestureDetector(
+                        onTap: yoloOnImage,
+                        onDoubleTap: pickImage,
+                        behavior: HitTestBehavior.translucent,
+                      ),
+                    ],
+                  ),
+                )
 
-
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        imageFile != null ? Image.file(imageFile!) : const SizedBox(),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Container(
-
-              child: Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    // Add your icon here
-                    Icon(Icons.camera_alt, size: 250.0, color: Colors.white.withOpacity(0.3)),
-                    GestureDetector(
-                      onTap: yoloOnImage,
-                      onDoubleTap: pickImage,
-                      behavior: HitTestBehavior.translucent,
-                    ),
-                  ],
-                ),
-              )
-
-            /*width: size.width, // Set the width to the screen width
+              /*width: size.width, // Set the width to the screen width
             height: 138.0, // Set the height to 138.0 pixels
             decoration: BoxDecoration(
               color: AppColors.colorApp3, // Set the background color to a custom color
@@ -104,11 +95,31 @@ class _YoloImageState extends State<YoloImage> {
                 ),
               ),
             ),*/
+            ),
+          ),
+          ...displayBoxesAroundRecognizedObjects(size),
+        ],
+      );
+    }
+    else if (!isLoaded) {
+      return const Scaffold(
+        body: Center(
+          child: Text("Model not loaded, waiting for it"),
+        ),
+      );
+    }
+    return const Scaffold(
+      body: Center(
+        child: Text(
+          "Back To Take image",
+          style: TextStyle(
+            color: AppColors.colorApp2, // Change color here
+            fontSize: 24, // Change size here
           ),
         ),
-        ...displayBoxesAroundRecognizedObjects(size),
-      ],
+      ),
     );
+
   }
 
   Future<void> loadYoloModel() async {
@@ -180,11 +191,11 @@ class _YoloImageState extends State<YoloImage> {
           allresult += "'I see a ${result[i]["tag"]}' ";
         }
         await speak(allresult + "please click once to hear the result again. "
-            " Or click double to detect another object .");
+            " Or double click  to detect another object .");
       });
     }
     else  {
-      speak("No objects detected in the image. Please select another image by click double .");
+      speak("No objects detected in the image. Please select another image by double click .");
     }
     /*String clickMessage = "if you want to hear the result again, please click on Center once. "
         "If you want to detect another object, please click on center twice.";
