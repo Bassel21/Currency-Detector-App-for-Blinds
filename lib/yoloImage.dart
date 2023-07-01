@@ -6,7 +6,7 @@ import 'package:flutter_vision/flutter_vision.dart';
 import 'package:image_picker/image_picker.dart';
 import 'Home.dart';
 import 'app_color.dart';
-import 'main.dart';
+
 
 class YoloImage extends StatefulWidget {
   const YoloImage({Key? key}) : super(key: key);
@@ -48,6 +48,7 @@ class _YoloImageState extends State<YoloImage> {
 
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
+
     if(imageFile !=null){
       return Stack(
         fit: StackFit.expand,
@@ -59,7 +60,7 @@ class _YoloImageState extends State<YoloImage> {
                 child: Positioned(
                   bottom: 0,
                   left: 0,
-                  right: 0,
+                  right: 0, 
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
@@ -73,28 +74,6 @@ class _YoloImageState extends State<YoloImage> {
                     ],
                   ),
                 )
-
-              /*width: size.width, // Set the width to the screen width
-            height: 138.0, // Set the height to 138.0 pixels
-            decoration: BoxDecoration(
-              color: AppColors.colorApp3, // Set the background color to a custom color
-              borderRadius: BorderRadius.circular(40.0), // Set the border radius to 30.0
-            ),
-            child: GestureDetector(
-              onTap: yoloOnImage,
-              onDoubleTap: pickImage,
-              child: const Center(
-                child: Text(
-                  "One Tab You Can Detect this Objects Again \nDouble Tap You Can Detect Another Object ",  // Set the text to "Detect Objects"
-                  style: TextStyle(
-                    color: Colors.white, // Set the text color to white
-                    fontSize: 10.0, // Set the font size to 10.0
-                    height: 5.5, // Set the line height to 1.5 times the font size
-                    // Set the font weight to bold
-                  ),
-                ),
-              ),
-            ),*/
             ),
           ),
           ...displayBoxesAroundRecognizedObjects(size),
@@ -108,17 +87,27 @@ class _YoloImageState extends State<YoloImage> {
         ),
       );
     }
-    return const Scaffold(
-      body: Center(
-        child: Text(
-          "Back To Take image",
-          style: TextStyle(
-            color: AppColors.colorApp2, // Change color here
-            fontSize: 24, // Change size here
+    else {
+      return GestureDetector(
+        onTap: pickImage,
+        child: Container(
+          color: Colors.white,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.camera,
+                  color: AppColors.colorApp2, // Change color here if needed
+                  size: 320, // Change size here if needed
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
+    }
+
 
   }
 
@@ -135,28 +124,23 @@ class _YoloImageState extends State<YoloImage> {
   }
 
   Future<void> pickImage() async {
-    final String speech = "now You can take image";
-    await speak(speech);
-    Future.delayed(const Duration(seconds: 2)).then((_) async {
-      final String speech = "Please press to side button to can take image ,"
-          "After that, click on the check mark located at the bottom right of the page";
+
+    Future.delayed(const Duration(seconds: 1)).then((_) async {
+      final String speech = "now You can take image Please press to side button to can take image ,"
+          "then click on the check mark located at the bottom right of the page";
       await speak(speech);
     });
-    /*flutterTts.speak("now You can take image");
-    Future.delayed(const Duration(seconds: 2)).then((_) {
-      flutterTts.speak("Please press to side button to can take image ,"
-          "After that, click on the check mark located at the bottom right of the page");
-    });*/
+
     final ImagePicker picker = ImagePicker();
     // Capture a photo
     final XFile? photo = await picker.pickImage(source: ImageSource.camera);
     if (photo != null) {
       setState(() {
         imageFile = File(photo.path);
-        speak("You now Taked Image");
+
         Future.delayed(const Duration(seconds: 2)).then((_) {
           yoloOnImage();
-          //flutterTts.speak("Image is ready now to detect ");
+          //speak("Image is ready now to detect ");
         });
       });
     }
@@ -166,6 +150,7 @@ class _YoloImageState extends State<YoloImage> {
   }
 
   yoloOnImage() async {
+    speak("Now you taked image");
     yoloResults.clear();
     Uint8List byte = await imageFile!.readAsBytes();
     final image = await decodeImageFromList(byte);
@@ -179,6 +164,7 @@ class _YoloImageState extends State<YoloImage> {
         confThreshold: 0.4,
         classThreshold: 0.5);
     if (result.isNotEmpty) {
+
       setState(() {
         yoloResults = result;
       });
@@ -197,28 +183,9 @@ class _YoloImageState extends State<YoloImage> {
     else  {
       speak("No objects detected in the image. Please select another image by double click .");
     }
-    /*String clickMessage = "if you want to hear the result again, please click on Center once. "
-        "If you want to detect another object, please click on center twice.";
-    await flutterTts.speak(clickMessage);*/
-    //pickImage();
+
   }
-//await flutterTts.speak("Image Do not belong to Egyptian Currency Please Try Again");
-  //Future.delayed(const Duration(seconds: 0)).then((_) async {
-  //await pickImage();
-  //});
 
-  //Future.delayed(const Duration(seconds: 8)).then((_) async {
-  //await flutterTts.setSpeechRate(0.3); // Set the speech rate to 0.8 to slow down the speech
-  //await flutterTts.speak(
-  //"if you want hear result again please Click on the bottom of the page one click"
-  //"  if you want detect another objects please Click on the bottom of the page double click ");
-  //});
-
-  //else {
-  //flutterTts.speak(
-  //"No objects detected in the image. Please select another image.");
-  //pickImage();
-  //}
 
   List<Widget> displayBoxesAroundRecognizedObjects(Size screen) {
     if (yoloResults.isEmpty) return[];

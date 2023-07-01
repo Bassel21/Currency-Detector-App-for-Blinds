@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vision/flutter_vision.dart';
 import 'Home.dart';
-import 'main.dart';
+
 
 class YoloVideo extends StatefulWidget {
   const YoloVideo({Key? key}) : super(key: key);
@@ -141,40 +141,7 @@ class _YoloVideoState extends State<YoloVideo> {
     });
   }
 
-  Future<void> yoloOnFrame(CameraImage cameraImage) async {
-    final result = await vision.yoloOnFrame(
-        bytesList: cameraImage.planes.map((plane) => plane.bytes).toList(),
-        imageHeight: cameraImage.height,
-        imageWidth: cameraImage.width,
-        iouThreshold: 0.4,
-        confThreshold: 0.4,
-        classThreshold: 0.5);
-    if (result.isNotEmpty) {
-      setState(() {
-        yoloResults = result;
-      });
 
-      int count = result.length;
-      String numofobjects = "'you have $count objects'";
-      speak(numofobjects);
-
-      Future.delayed(const Duration(seconds: 2)).then((_) async {
-
-        String allresult = "";
-        for (var i = 0; i < result.length; i++) {
-          allresult += "'I see a ${result[i]["tag"]}' ";
-        }
-        await speak(allresult);
-      });
-
-      //await speak('I see a ${result[0]["tag"]}');
-      //await flutterTts.setSilence(3);
-      //await flutterTts.awaitSpeakCompletion(true);
-      //flutterTts.stop();
-
-
-    }
-  }
 
   Future<void> startDetection() async {
     setState(() {
@@ -203,6 +170,36 @@ class _YoloVideoState extends State<YoloVideo> {
     await speak("Stop Detection");
   }
 
+  Future<void> yoloOnFrame(CameraImage cameraImage) async {
+    final result = await vision.yoloOnFrame(
+        bytesList: cameraImage.planes.map((plane) => plane.bytes).toList(),
+        imageHeight: cameraImage.height,
+        imageWidth: cameraImage.width,
+        iouThreshold: 0.4,
+        confThreshold: 0.4,
+        classThreshold: 0.5);
+    if (result.isNotEmpty) {
+      setState(() {
+        yoloResults = result;
+      });
+
+      int count = result.length;
+      String numofobjects = "'you have $count objects'";
+      speak(numofobjects);
+
+      Future.delayed(const Duration(seconds: 2)).then((_) async {
+
+        String allresult = "";
+        for (var i = 0; i < result.length; i++) {
+          allresult += "'I see a ${result[i]["tag"]}' ";
+        }
+        await speak(allresult);
+      });
+
+
+
+    }
+  }
   List<Widget> displayBoxesAroundRecognizedObjects(Size screen) {
     if (yoloResults.isEmpty) return [];
     double factorX = screen.width / (cameraImage?.height ?? 1);

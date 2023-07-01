@@ -8,7 +8,6 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'dart:async';
 import 'app_color.dart';
 
-
 enum Options { none, image, frame, vision }
 
 FlutterTts flutterTts = FlutterTts();
@@ -221,9 +220,7 @@ class _HomeState extends State<Home> {
                           builder: (context) => const YoloImage(),
                         ),
                       );
-                      Future.delayed(const Duration(seconds: 3)).then((_) {
-                        flutterTts.speak("Please press to side button to can take image ");
-                      });
+
                       setState(() {
                         _isCameraIconPressed = false;
                       });
