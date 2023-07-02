@@ -27,11 +27,11 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 2000),
+      duration: const Duration(milliseconds: 2000),
     );
 
     _animation = Tween<Offset>(
-      begin: Offset(1.0, 5.0), // Start the animation from the bottom
+      begin: const Offset(1.0, 5.0), // Start the animation from the bottom
       end: Offset.zero, // Move the animation to the center
     ).animate(CurvedAnimation(
       parent: _controller,
@@ -41,12 +41,12 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     Timer(
       const Duration(seconds: 4),
           () => Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => Home()),
+        MaterialPageRoute(builder: (context) => const Home()),
             (route) => false,
       ),
     );
 
-    Future.delayed(Duration(milliseconds: 1700), () {
+    Future.delayed(const Duration(milliseconds: 1700), () {
       _controller.forward();
     });
   }
@@ -67,7 +67,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
         child: SlideTransition(
           position: _animation,
           child: TweenAnimationBuilder(
-            duration: Duration(milliseconds: 2300),
+            duration: const Duration(milliseconds: 2300),
             tween: Tween<double>(begin: 0, end: 1),
             builder: (BuildContext context, double opacity, Widget? child) {
               return Opacity(
@@ -75,7 +75,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                 child: child,
               );
             },
-            child: Text(
+            child: const Text(
               'Currency Detection App',
               style: TextStyle(
                 color: AppColors.colorApp3,

@@ -37,7 +37,6 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   Options option = Options.none;
-  bool _isCameraIconPressed = true;
   @override
   void initState() {
     super.initState();
@@ -208,7 +207,7 @@ class _HomeState extends State<Home> {
                   width: 370,
                   height: 340,
                   child: IconButton(
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.camera_alt,
                       size: 340.0,
                       color: AppColors.colorApp3,
@@ -222,12 +221,11 @@ class _HomeState extends State<Home> {
                       );
 
                       setState(() {
-                        _isCameraIconPressed = false;
                       });
                     },
                   ),
                 ),
-                Text(
+                const Text(
                   'Use Camera To Take Image',
                   style: TextStyle(fontSize: 20),
                 ),

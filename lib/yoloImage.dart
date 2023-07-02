@@ -1,12 +1,10 @@
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vision/flutter_vision.dart';
 import 'package:image_picker/image_picker.dart';
 import 'Home.dart';
 import 'app_color.dart';
-
 
 class YoloImage extends StatefulWidget {
   const YoloImage({Key? key}) : super(key: key);
@@ -41,15 +39,17 @@ class _YoloImageState extends State<YoloImage> {
     super.dispose();
     await vision.closeYoloModel();
   }
+
   Future<void> speak(String text) async {
     await flutterTts.setSpeechRate(0.4);
     await flutterTts.speak(text);
   }
 
+  @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
 
-    if(imageFile !=null){
+    if (imageFile != null) {
       return Stack(
         fit: StackFit.expand,
         children: [
@@ -58,41 +58,39 @@ class _YoloImageState extends State<YoloImage> {
             alignment: Alignment.bottomCenter,
             child: Container(
                 child: Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0, 
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      // Add your icon here
-                      Icon(Icons.camera_alt, size: 250.0, color: Colors.white.withOpacity(0.3)),
-                      GestureDetector(
-                        onTap: yoloOnImage,
-                        onDoubleTap: pickImage,
-                        behavior: HitTestBehavior.translucent,
-                      ),
-                    ],
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  // Add your icon here
+                  Icon(Icons.camera_alt,
+                      size: 250.0, color: Colors.white.withOpacity(0.3)),
+                  GestureDetector(
+                    onTap: yoloOnImage,
+                    onDoubleTap: pickImage,
+                    behavior: HitTestBehavior.translucent,
                   ),
-                )
-            ),
+                ],
+              ),
+            )),
           ),
           ...displayBoxesAroundRecognizedObjects(size),
         ],
       );
-    }
-    else if (!isLoaded) {
+    } else if (!isLoaded) {
       return const Scaffold(
         body: Center(
           child: Text("Model not loaded, waiting for it"),
         ),
       );
-    }
-    else {
+    } else {
       return GestureDetector(
         onTap: pickImage,
         child: Container(
           color: Colors.white,
-          child: Center(
+          child: const Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -107,8 +105,6 @@ class _YoloImageState extends State<YoloImage> {
         ),
       );
     }
-
-
   }
 
   Future<void> loadYoloModel() async {
@@ -124,10 +120,9 @@ class _YoloImageState extends State<YoloImage> {
   }
 
   Future<void> pickImage() async {
-
     Future.delayed(const Duration(seconds: 1)).then((_) async {
-      final String speech = "now You can take image Please press to side button to can take image ,"
-          "then click on the check mark located at the bottom right of the page";
+      const String speech = "Please press to side button to take image ,"
+          "then click on the check mark located at the upper right of the page";
       await speak(speech);
     });
 
@@ -143,14 +138,13 @@ class _YoloImageState extends State<YoloImage> {
           //speak("Image is ready now to detect ");
         });
       });
-    }
-    else {
+    } else {
       await flutterTts.stop();
     }
   }
 
   yoloOnImage() async {
-    speak("Now you taked image");
+    //speak("Now you taked image");
     yoloResults.clear();
     Uint8List byte = await imageFile!.readAsBytes();
     final image = await decodeImageFromList(byte);
@@ -164,7 +158,6 @@ class _YoloImageState extends State<YoloImage> {
         confThreshold: 0.4,
         classThreshold: 0.5);
     if (result.isNotEmpty) {
-
       setState(() {
         yoloResults = result;
       });
@@ -176,19 +169,17 @@ class _YoloImageState extends State<YoloImage> {
         for (var i = 0; i < result.length; i++) {
           allresult += "'I see a ${result[i]["tag"]}' ";
         }
-        await speak(allresult + "please click once to hear the result again. "
-            " Or double click  to detect another object .");
+        await speak(
+            "${allresult}please click once to hear the result again.  Or double click  to detect another object .");
       });
+    } else {
+      speak(
+          "No objects detected in the image. Please select another image by double click .");
     }
-    else  {
-      speak("No objects detected in the image. Please select another image by double click .");
-    }
-
   }
 
-
   List<Widget> displayBoxesAroundRecognizedObjects(Size screen) {
-    if (yoloResults.isEmpty) return[];
+    if (yoloResults.isEmpty) return [];
 
     double factorX = screen.width / (imageWidth);
     double imgRatio = imageWidth / imageHeight;
